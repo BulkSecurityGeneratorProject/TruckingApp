@@ -5,6 +5,7 @@ import java.util.Date;
 
 public class UserEntity {
 
+    private int id;
     private String firtstname;
     private String lastname;
     private String middlename;
@@ -22,7 +23,8 @@ public class UserEntity {
     public UserEntity() {
     }
 
-    public UserEntity(String firtstname, String lastname, String middlename, Date birthday, String email, String city, String street, String house, int apartment, Enum role, String login, String password, String passport) {
+    public UserEntity(int id, String firtstname, String lastname, String middlename, Date birthday, String email, String city, String street, String house, int apartment, Enum role, String login, String password, String passport) {
+        this.id = id;
         this.firtstname = firtstname;
         this.lastname = lastname;
         this.middlename = middlename;
@@ -36,6 +38,14 @@ public class UserEntity {
         this.login = login;
         this.password = password;
         this.passport = passport;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getFirtstname() {
@@ -149,6 +159,7 @@ public class UserEntity {
 
         UserEntity that = (UserEntity) o;
 
+        if (id != that.id) return false;
         if (apartment != that.apartment) return false;
         if (firtstname != null ? !firtstname.equals(that.firtstname) : that.firtstname != null) return false;
         if (lastname != null ? !lastname.equals(that.lastname) : that.lastname != null) return false;
@@ -166,7 +177,8 @@ public class UserEntity {
 
     @Override
     public int hashCode() {
-        int result = firtstname != null ? firtstname.hashCode() : 0;
+        int result = id;
+        result = 31 * result + (firtstname != null ? firtstname.hashCode() : 0);
         result = 31 * result + (lastname != null ? lastname.hashCode() : 0);
         result = 31 * result + (middlename != null ? middlename.hashCode() : 0);
         result = 31 * result + (birthday != null ? birthday.hashCode() : 0);
@@ -184,8 +196,9 @@ public class UserEntity {
 
     @Override
     public String toString() {
-        return "User{" +
-            "firtstname='" + firtstname + '\'' +
+        return "UserEntity{" +
+            "id=" + id +
+            ", firtstname='" + firtstname + '\'' +
             ", lastname='" + lastname + '\'' +
             ", middlename='" + middlename + '\'' +
             ", birthday=" + birthday +
