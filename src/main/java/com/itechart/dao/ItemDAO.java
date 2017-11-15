@@ -12,8 +12,8 @@ public interface ItemDAO {
 
     Item getItemByName(String name);
 
-    void deleteItem(int id);
+    void deleteItem(Item item);
 
-    void saveItem(String name);
+    void saveItem(Item item);
 
 }
