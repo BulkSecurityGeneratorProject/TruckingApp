@@ -1,11 +1,30 @@
 package com.itechart.domain;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "items")
 public class Item {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "iditem")
     private Integer id;
+
+    @Column(name = "item_name")
     private String name;
+
+    @Column(name = "item_price")
     private Integer price;
-    private String type;
+
+    @Column(name = "item_type")
+    @Convert(converter = TypeConverter.class)
+    private Type type;
+
+    public enum Type {
+        COUNT,
+        VOLUME
+    }
 
     public Integer getId() {
         return id;
@@ -31,11 +50,11 @@ public class Item {
         this.price = price;
     }
 
-    public String getType() {
+    public Type getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(Type type) {
         this.type = type;
     }
 
@@ -69,5 +88,33 @@ public class Item {
             ", price=" + price +
             ", type='" + type + '\'' +
             '}';
+    }
+
+    @Convert
+    private class TypeConverter implements AttributeConverter<Type, String> {
+
+        @Override
+        public String convertToDatabaseColumn(Type attribute) {
+            switch (attribute) {
+                case COUNT:
+                    return "C";
+                case VOLUME:
+                    return "V";
+                default:
+                    throw new IllegalArgumentException("Unknown " + attribute);
+            }
+        }
+
+        @Override
+        public Type convertToEntityAttribute(String dbData) {
+            switch (dbData) {
+                case "C":
+                    return Type.COUNT;
+                case "V":
+                    return Type.VOLUME;
+                default:
+                    throw new IllegalArgumentException("Unknown " + dbData);
+            }
+        }
     }
 }
