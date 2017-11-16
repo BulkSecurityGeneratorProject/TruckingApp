@@ -1,30 +1,76 @@
 package com.itechart.domain;
 
-
+import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 
-public class UserEntity {
 
+
+@Entity
+@Table(name = "users")
+public class Users implements Serializable {
+
+
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "iduser")
     private int id;
+
+    @Column(name = "user_firstname")
     private String firtstname;
+
+    @Column(name = "user_lastname")
     private String lastname;
+
+
+    @Column(name = "user_middlename")
     private String middlename;
+
+    @Column(name = "user_birthday")
     private Date birthday;
+
+    @Column(name = "user_email")
     private String email;
+
+    @Column(name = "user_city")
     private String city;
+
+    @Column(name = "user_street")
     private String street;
+
+    @Column(name = "user_house")
     private String house;
+
+    @Column(name = "user_apartment")
     private int apartment;
-    private Enum role;
+
+    @Column(name = "user_role")
+    @Convert(converter = RoleConverter.class)
+    private UserRole role;
+
+    @Column(name = "user_login")
     private String login;
+
+    @Column(name = "user_password")
     private String password;
+
+    @Column(name = "user_passport")
     private String passport;
 
-    public UserEntity() {
+    public enum UserRole {
+        SYSADMIN,
+        ADMIN,
+        MANAGER,
+        DISPATCHER,
+        DRIVER,
+        OWNER
     }
 
-    public UserEntity(int id, String firtstname, String lastname, String middlename, Date birthday, String email, String city, String street, String house, int apartment, Enum role, String login, String password, String passport) {
-        this.id = id;
+    public Users() {
+    }
+
+    public Users(String firtstname, String lastname, String middlename, Date birthday, String email, String city, String street, String house, int apartment, UserRole role, String login, String password, String passport) {
         this.firtstname = firtstname;
         this.lastname = lastname;
         this.middlename = middlename;
@@ -120,11 +166,11 @@ public class UserEntity {
         this.apartment = apartment;
     }
 
-    public Enum getRole() {
+    public UserRole getRole() {
         return role;
     }
 
-    public void setRole(Enum role) {
+    public void setRole(UserRole role) {
         this.role = role;
     }
 
@@ -157,22 +203,22 @@ public class UserEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        UserEntity that = (UserEntity) o;
+        Users users = (Users) o;
 
-        if (id != that.id) return false;
-        if (apartment != that.apartment) return false;
-        if (firtstname != null ? !firtstname.equals(that.firtstname) : that.firtstname != null) return false;
-        if (lastname != null ? !lastname.equals(that.lastname) : that.lastname != null) return false;
-        if (middlename != null ? !middlename.equals(that.middlename) : that.middlename != null) return false;
-        if (birthday != null ? !birthday.equals(that.birthday) : that.birthday != null) return false;
-        if (email != null ? !email.equals(that.email) : that.email != null) return false;
-        if (city != null ? !city.equals(that.city) : that.city != null) return false;
-        if (street != null ? !street.equals(that.street) : that.street != null) return false;
-        if (house != null ? !house.equals(that.house) : that.house != null) return false;
-        if (role != null ? !role.equals(that.role) : that.role != null) return false;
-        if (login != null ? !login.equals(that.login) : that.login != null) return false;
-        if (password != null ? !password.equals(that.password) : that.password != null) return false;
-        return passport != null ? passport.equals(that.passport) : that.passport == null;
+        if (id != users.id) return false;
+        if (apartment != users.apartment) return false;
+        if (firtstname != null ? !firtstname.equals(users.firtstname) : users.firtstname != null) return false;
+        if (lastname != null ? !lastname.equals(users.lastname) : users.lastname != null) return false;
+        if (middlename != null ? !middlename.equals(users.middlename) : users.middlename != null) return false;
+        if (birthday != null ? !birthday.equals(users.birthday) : users.birthday != null) return false;
+        if (email != null ? !email.equals(users.email) : users.email != null) return false;
+        if (city != null ? !city.equals(users.city) : users.city != null) return false;
+        if (street != null ? !street.equals(users.street) : users.street != null) return false;
+        if (house != null ? !house.equals(users.house) : users.house != null) return false;
+        if (role != users.role) return false;
+        if (login != null ? !login.equals(users.login) : users.login != null) return false;
+        if (password != null ? !password.equals(users.password) : users.password != null) return false;
+        return passport != null ? passport.equals(users.passport) : users.passport == null;
     }
 
     @Override
@@ -196,7 +242,7 @@ public class UserEntity {
 
     @Override
     public String toString() {
-        return "UserEntity{" +
+        return "Users{" +
             "id=" + id +
             ", firtstname='" + firtstname + '\'' +
             ", lastname='" + lastname + '\'' +
@@ -212,5 +258,49 @@ public class UserEntity {
             ", password='" + password + '\'' +
             ", passport='" + passport + '\'' +
             '}';
+    }
+
+    @Convert
+    private class RoleConverter implements AttributeConverter<UserRole, String> {
+
+        @Override
+        public String convertToDatabaseColumn(UserRole attribute) {
+            switch (attribute) {
+                case ADMIN:
+                    return "A";
+                case DISPATCHER:
+                    return "D";
+                case OWNER:
+                    return "O";
+                case DRIVER:
+                    return "DR";
+                case MANAGER:
+                    return "M";
+                case SYSADMIN:
+                    return "S";
+                default:
+                    throw new IllegalArgumentException("Unknown " + attribute);
+            }
+        }
+
+        @Override
+        public UserRole convertToEntityAttribute(String dbData) {
+            switch (dbData) {
+                case "A":
+                    return UserRole.ADMIN;
+                case "D":
+                    return UserRole.DISPATCHER;
+                case "DR":
+                    return UserRole.DRIVER;
+                case "O":
+                    return UserRole.OWNER;
+                case "M":
+                    return UserRole.MANAGER;
+                case "S":
+                    return UserRole.SYSADMIN;
+                default:
+                    throw new IllegalArgumentException("Unknown " + dbData);
+            }
+        }
     }
 }
