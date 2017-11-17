@@ -7,8 +7,8 @@ import java.util.Optional;
 
 /**
  * @author blink7
- * @version 1.0
- * @since 2017-11-15
+ * @version 1.1
+ * @since 2017-11-17
  */
 public interface WaybillDao {
 
@@ -49,4 +49,9 @@ public interface WaybillDao {
      * @param waybill to delete
      */
     void delete(Waybill waybill);
+
+    /**
+     * @return the number of waybills in the DB
+     */
+    int size();
 }

@@ -26,7 +26,7 @@ public class LossAct implements Serializable {
     @Column(name = "item_amount")
     private int amount;
 
-    //TODO: Add this column.
+    @Column(name = "act_date_issue")
     private LocalDate date;
 
     public Invoice getInvoice() {

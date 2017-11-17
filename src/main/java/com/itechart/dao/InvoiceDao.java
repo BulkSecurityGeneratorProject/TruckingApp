@@ -7,8 +7,8 @@ import java.util.Optional;
 
 /**
  * @author blink7
- * @version 1.0
- * @since 2017-11-15
+ * @version 1.1
+ * @since 2017-11-17
  */
 public interface InvoiceDao {
 
@@ -49,4 +49,9 @@ public interface InvoiceDao {
      * @param invoice to delete
      */
     void delete(Invoice invoice);
+
+    /**
+     * @return the number of invoices in the DB
+     */
+    int size();
 }
